@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title><%= (typeof title != "undefined" ? title : "") %></title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel='icon' href='/shopping-cart.ico' class='js-favicon'>
+        <link rel="icon" href="favicon.ico?v=1.1">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        
+        <script src="https://kit.fontawesome.com/96b33ffa46.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="/css/style.css" />
+
+    </head>
+
+    <body>
+      <div class="ajaxbg">
+        <div class="ajaxinner">
+            <h3>You are now being redirected to paypal...</h3>
+            <button class="btn btn-primary" type="button" disabled>
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              Loading...
+            </button>
+        </div>
+     </div>
+        <nav class="navbar navbar-expand-lg navbar-dark text-warning bg-dark" style="color: #7f4722;">
+            <a class="navbar-brand text-warning bg-dark" href="#">ShopHere</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="nav navbar-nav">
+                <% pages.forEach(function(page){ %>
+                    <% if (page.slug == "home") { %>
+                <li class="nav-item active">
+                  <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <% } else {%>
+                <li class="nav-item">
+                  <a class="nav-link" href="/<%= page.slug %>"><%= page.title %></a>
+                </li>
+                <% } %>
+                <% }); %>
+              </ul>
+              
+
+                <form action="/search/" method="post" class="nav nav-bar ml-auto">
+                <div id="navbar-search-autocomplete" class="form-outline">
+                  <input type="search" name="search" id="search" class="form-control" placeholder="Search"/>
+                </div>
+                <button type="submit" class="btn btn-primary ml-2">
+                  <!-- <i class="fas fa-search"></i> -->
+                  🔍
+                </button>
+                </form> 
+              
+              <ul class="nav nav-bar ml-auto">
+                <li><a class="bg-info text-decoration-none text-white rounded p-2 m-2" href="/cart/checkout">Cart (
+                    <% if (typeof cart !== "undefined") { %>
+                    <%= cart.length %>
+                    <% } else {%>
+                    0
+                    <% } %>
+                )</a></li>
+              
+              
+                <% if (user && user.admin == 1) { %>   
+                  <li><a class="m-2 bg-white text-dark text-decoration-none rounded p-2" href="/admin/pages">Admin Panel</a></li> 
+                <% }%>  
+
+                  <% if (user) { %>
+                    <li class="nav nav-bar dropdown dropleft show">
+                      <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <%= user.username %>
+                      </a>
+                    
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="/users/logout">logout</a>
+                      </div>
+                    </li>
+                    <% } else {%>
+                      <li><a class="mx-2 bg-white text-dark text-decoration-none rounded p-2" href="/users/register"> Register</a></li>
+                      <li><a class="mx-2 bg-white text-dark text-decoration-none rounded p-2" href="/users/login"> Login</a></li>
+                    <% } %>
+              </ul>
+            </div>
+        </nav>
+
+
+        <div class="container mt-2">
+            <%- messages('messages', locals) %>
+            
+            <% if (errors) {%>
+                <% errors.forEach(function(error) { %>
+                <div class="alert alert-danger">
+                    <%= error.msg %>
+                </div>
+                <% });%>
+            <% }%>
+    
+            <% if(title!="Home" && title!="About" && title!="Services") {%>
+            <% if (title!="Register" && title!="Login") {%> 
+            <div class="row">
+                <div class="col-md-2">
+                    <h3>Categories</h3>
+                    <ul class="list-group">
+                        <% if ("All products"==title) {%>
+                          <li class="list-group-item bg-dark text-white text-decoration-none"><a href="/products">All products</a></li>
+                        <% } else {%>
+                          <li class="list-group-item"><a href="/products">All products</a></li>
+                        <% }; %>
+                        <% categories.forEach(function(c){ %>
+                          <% if (c.slug==title) {%>
+                              <li class="list-group-item bg-dark text-white text-decoration-none"><a href="/products/<%= c.slug %>"><%= c.title.charAt(0).toUpperCase() + c.title.toLowerCase().slice(1) %></a></li>
+                          <% } else {%>
+                              <li class="list-group-item"><a href="/products/<%= c.slug %>"><%= c.title.charAt(0).toUpperCase() + c.title.toLowerCase().slice(1) %></a></li>
+                          <% }; %>
+                      <% }); %>
+                    
+                </div>
+
+                <div class="col-xs-12 col-md-1">
+                  
+                </div>
+            <% }%>
+                <div class="col-xs-8 col-md-8">
+            <% }%>
+
+             
+              
