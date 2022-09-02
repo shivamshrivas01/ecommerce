@@ -1,0 +1,73 @@
+<%- include('../_layouts/adminheader') %>
+
+<h2 class="page-title mt-5"><code>Admin panel</code></h2>
+<div class="text-center">
+    <a href="/admin/products/add-product" class="bg-col rounded p-2">Add a new product</a>
+</div>
+<br><br>
+
+<% if (count > 0) { %>
+    
+<div class="container-fluid">
+    <!-- ============================================================== -->
+    <!-- Start Page Content -->
+    <!-- ============================================================== -->
+    <div class="row bg-white">
+        <div class="col-sm-12">
+            <div class="white-box">
+                <h3 class="box-title">Products Detail</h3>
+                <p class="text-muted">you can perform the add, edit and update product operation</p>
+                <div class="table-responsive shadow-lg">
+                    <table class="table text-nowrap alignmiddle">
+                        <thead class="bg-col">
+                            <tr>
+                                <th class="border-top-0">Product</th>
+                                <th class="border-top-0">Original Price</th>
+                                <th class="border-top-0">Discounted Price</th>
+                                <th class="border-top-0">Category</th>
+                                <th class="border-top-0">Sub category</th>
+                                <th class="border-top-0">Instock</th>
+                                <th class="border-top-0">Product Image</th>
+                                <!-- <th class="border-top-0">Edit</th>
+                                <th class="border-top-0">Delete</th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% products.forEach(function(product){ %>
+                                <tr>
+                                    <td><%= product.title.slice(0, 20) %></td>
+                                    <td>Rs.<%= parseFloat(product.originalPrice).toFixed(2) %></td>
+                                    <td>Rs.<%= parseFloat(product.discountedPrice).toFixed(2) %></td>
+                                    <td><%= product.category %></td>
+                                    <td><%= product.subCategory %></td>
+                                    <td><%= product.inStock %></td>
+                                    <td>
+                                        <% if (product.image == "") { %>
+                                            <img id="noimage" src="/images/noimage.png">
+                                            <% } else {%>
+                                        <img id="noimage" src="/product_images/<%= product._id %>/<%= product.image %>">
+                                        <% }%>
+                                    </td>
+                                    <!-- <td><a class="text-dark" href="/admin/products/edit-product/<%= product._id %>"><i class="fa-solid fa-pen-to-square"></i></a></td> -->
+                                    <!-- <td><a class="text-dark confirmDeletion" href="/admin/products/delete-product/<%= product._id %>"><i class="fa-solid fa-trash"></i></a></td> -->
+                                </tr>
+                                <% }); %>
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>    
+</div>
+        
+    <% } else {%>
+
+<h3 class="text-center">No products to display.</h3>
+<% }%>
+</div>
+
+
+
+
+
+<%- include('../_layouts/adminfooter') %>

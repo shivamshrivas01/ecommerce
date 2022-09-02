@@ -1,0 +1,67 @@
+<%- include ('../_layouts/adminheader'); %>
+<h2 class="page-title"><code>Admin panel</code></h2>
+<div class="text-center mt-5">
+  <a href="/admin/pages/add-page" class="bg-col rounded p-2">Add a new pages</a>
+</div>
+<br><br>
+
+
+
+<div class="container-fluid">
+  <div class="row bg-white">
+      <div class="col-sm-12">
+          <div class="white-box">
+              <h3 class="box-title">Page Detail</h3>
+              <p class="text-muted">you can perform the add, edit and update page operation.</p>
+              <div class="table-responsive shadow-lg">
+                  <table class="table text-nowrap alignmiddle">
+                      <thead class="bg-col">
+                          <tr>
+                              <th class="border-top-0">Title</th>
+                              <th class="border-top-0">Edit</th>
+                              <th class="border-top-0">Delete </th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <% pages.forEach(function(page){ %>
+                            <tr id="id_<%= page._id %>" class="<%= page.slug %>">
+                                <td><%= page.title %></td>
+                                <td><a class="text-dark" href="/admin/pages/edit-page/<%= page._id %>"><i class="fa-solid fa-pen-to-square"></i></a></td>
+                                <% if (page.slug == "home") { %>
+                                <td class="text-danger">NA</td>
+                                <% }  else {%>
+                                <td><a class="confirmDeletion text-dark" href="/admin/pages/delete-page/<%= page._id %>"><i class="fa-solid fa-trash"></i></a></td>
+                                <% }%>
+                              </tr>
+                              <% }); %>
+                      </tbody>
+                   </table>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+</div>
+
+  <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+  <script>
+  
+    //drag and drop functionality
+      $('tbody').sortable({
+  
+          items: "tr:not('.home')",
+          placeholder: "ui-state-hightlight",
+          update: function () {
+              var ids = $('tbody').sortable("serialize");
+              var url = "/admin/pages/reorder-pages";
+              
+              $.post(url, ids);
+          }
+  
+      });
+  
+  </script>
+  
+
+<%- include ('../_layouts/adminfooter'); %>
